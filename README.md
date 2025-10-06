@@ -8,19 +8,7 @@ A modern, browser-based 2D space shooter game built with TypeScript and Three.js
 
 ## 📸 Game Screenshots
 
-### 🎮 Gameplay Action
-![Gameplay Screenshot](./assets/screenshots/gameplay.png)
-
-### 🚀 Spaceship Design
-![Spaceship Screenshot](./assets/screenshots/spaceship.png)
-
-### 💥 Explosion Effects
-![Explosion Screenshot](./assets/screenshots/explosion.png)
-
-### 🎯 Score System
-![Score Screenshot](./assets/screenshots/score.png)
-
-*To add screenshots, place PNG images in the `assets/screenshots/` directory with the filenames shown above.*
+![Score Screenshot](./assets/screenshots/score.png){:width=50%}
 
 ---
 
