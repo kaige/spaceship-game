@@ -27,7 +27,7 @@ export interface GameObject {
 }
 
 export const GAME_CONFIG: GameConfig = {
-    canvasWidth: 800,
-    canvasHeight: 600,
+    canvasWidth: 400,
+    canvasHeight: 660, // 600 * 1.1 = 660
     backgroundColor: 0x000511
 };

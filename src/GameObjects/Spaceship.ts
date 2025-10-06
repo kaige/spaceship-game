@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GameObject, Vector2D } from '../types/GameTypes';
 import { MovementInput } from '../types/InputTypes';
+import { GameTextureLoader } from '../utils/TextureLoader';
 
 export class Spaceship implements GameObject {
     public id: string;
@@ -17,35 +18,52 @@ export class Spaceship implements GameObject {
         this.id = `spaceship_${Date.now()}`;
         this.position = { x: 0, y: -250 }; // Start at bottom center (more obvious position)
         this.velocity = { x: 0, y: 0 };
-        this.size = { x: 40, y: 40 };
+        this.size = { x: 64, y: 64 }; // Standard sprite size
         this.isActive = true;
 
         this.moveSpeed = 300; // pixels per second
         this.boundaryPadding = this.size.x / 2;
 
-        this.mesh = this.createMesh();
+        this.mesh = this.createFallbackMesh();
+        this.loadTexture(); // Try to load real image
         console.log(`🚀 Spaceship created at position (${this.position.x}, ${this.position.y})`);
     }
 
-    private createMesh(): THREE.Mesh {
-        // Create a simple triangle-shaped spaceship
-        const shape = new THREE.Shape();
+    private createFallbackMesh(): THREE.Mesh {
+        return GameTextureLoader.createFallbackShape('fighter');
+    }
 
-        // Draw triangle pointing upward
-        shape.moveTo(0, 20);     // Top point
-        shape.lineTo(-15, -15);  // Bottom left
-        shape.lineTo(15, -15);   // Bottom right
-        shape.lineTo(0, 20);     // Back to top
+    private async loadTexture(): Promise<void> {
+        try {
+            // Try to load the fighter image
+            const texture = await GameTextureLoader.loadTexture('/assets/images/fighter.png');
 
-        const geometry = new THREE.ShapeGeometry(shape);
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x00ff00, // Green color for better visibility
-            side: THREE.DoubleSide
-        });
+            // Create sprite mesh with texture
+            const geometry = new THREE.PlaneGeometry(this.size.x, this.size.y);
+            const material = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
 
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(this.position.x, this.position.y, 1); // z=1 for foreground
-        return mesh;
+            const texturedMesh = new THREE.Mesh(geometry, material);
+            texturedMesh.position.set(this.position.x, this.position.y, 1);
+
+            // Replace the fallback mesh
+            if (this.mesh.parent) {
+                const parent = this.mesh.parent;
+                parent.remove(this.mesh);
+                this.mesh.geometry.dispose();
+                (this.mesh.material as THREE.Material).dispose();
+                parent.add(texturedMesh);
+            }
+
+            this.mesh = texturedMesh;
+            console.log('✅ Fighter texture loaded successfully!');
+        } catch (error) {
+            console.log('📝 Using fallback fighter shape (no texture found)');
+            // Keep the fallback mesh
+        }
     }
 
     public update(deltaTime: number, input: MovementInput, canvasWidth: number, canvasHeight: number): void {

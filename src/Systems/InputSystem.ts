@@ -12,7 +12,11 @@ export class InputSystem {
             ArrowLeft: false,
             ArrowRight: false,
             Space: false,
-            ' ': false
+            ' ': false,
+            p: false,
+            P: false,
+            m: false,
+            M: false
         };
 
         this.callbacks = {};
@@ -133,6 +137,26 @@ export class InputSystem {
 
     public isKeyPressed(key: keyof KeyboardState): boolean {
         return this.keyboardState[key];
+    }
+
+    public checkAndConsumePauseKey(): boolean {
+        if (this.keyboardState.p || this.keyboardState.P) {
+            // Consume the key press to prevent repeated toggling
+            this.keyboardState.p = false;
+            this.keyboardState.P = false;
+            return true;
+        }
+        return false;
+    }
+
+    public checkAndConsumeMusicKey(): boolean {
+        if (this.keyboardState.m || this.keyboardState.M) {
+            // Consume the key press to prevent repeated toggling
+            this.keyboardState.m = false;
+            this.keyboardState.M = false;
+            return true;
+        }
+        return false;
     }
 
     public getKeyboardState(): Readonly<KeyboardState> {

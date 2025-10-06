@@ -5,6 +5,10 @@ export interface KeyboardState {
     ArrowRight: boolean;
     Space: boolean;
     ' ': boolean; // Alternative space key representation
+    p: boolean;
+    P: boolean;
+    m: boolean;
+    M: boolean;
 }
 
 export interface InputCallbacks {
