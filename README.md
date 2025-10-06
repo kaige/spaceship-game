@@ -8,7 +8,9 @@ A modern, browser-based 2D space shooter game built with TypeScript and Three.js
 
 ## 📸 Game Screenshots
 
-![Score Screenshot](./assets/screenshots/score.png){:width=50%}
+<div align="center">
+  <img src="./assets/screenshots/score.png" alt="Score Screenshot" width="25%">
+</div>
 
 ---
 
